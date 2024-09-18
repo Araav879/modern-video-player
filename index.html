@@ -1,177 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Video Player - LAKSHYANISCHYA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Video Player - LAKSHYANISCHYA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-    .video-container {
-      position: relative;
-      max-width: 800px;
-      width: 100%;
-      background-color: #000;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
+        .video-container {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
 
-    video {
-      width: 100%;
-      display: block;
-      border-radius: 10px 10px 0 0;
-    }
+        .video-js {
+            width: 100%;
+            height: 100%;
+        }
 
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px;
-      background-color: #333;
-      color: #fff;
-    }
+        .vjs-custom-controls {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+        }
 
-    .controls button {
-      background-color: transparent;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      padding: 10px;
-      font-size: 16px;
-      transition: 0.3s;
-    }
+        .vjs-custom-controls button {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
 
-    .controls button:hover {
-      color: #ffcc00;
-    }
+        .vjs-custom-controls button:hover {
+            color: #ffcc00;
+        }
 
-    .controls button:focus {
-      outline: none;
-    }
+        .vjs-custom-controls button:focus {
+            outline: none;
+        }
 
-    .progress-bar {
-      position: relative;
-      width: 100%;
-      height: 5px;
-      background-color: #555;
-      margin: 0 10px;
-      cursor: pointer;
-    }
+        .vjs-progress-holder {
+            position: relative;
+            width: 100%;
+            height: 5px;
+            background-color: #555;
+            margin: 0 10px;
+            cursor: pointer;
+        }
 
-    .progress-bar div {
-      width: 0;
-      height: 100%;
-      background-color: #ffcc00;
-    }
+        .vjs-progress-holder .vjs-play-progress {
+            height: 100%;
+            background-color: #ffcc00;
+        }
 
-    .volume-control {
-      display: flex;
-      align-items: center;
-    }
+        .vjs-volume-control {
+            display: flex;
+            align-items: center;
+        }
 
-    .volume-slider {
-      width: 100px;
-      margin-left: 10px;
-    }
+        .vjs-volume-slider {
+            width: 100px;
+            margin-left: 10px;
+        }
 
-    .fullscreen {
-      font-size: 18px;
-    }
-  </style>
+        .vjs-fullscreen-control {
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="video-container">
-  <video id="videoPlayer" src="https://kgs-v2.akamaized.net/kgs-test/geography-foundation-m3u8/L16/L16.mp4" controlslist="nodownload" preload="metadata"></video>
-
-  <!-- Custom Controls -->
-  <div class="controls">
-    <button id="playPauseBtn"><i class="fas fa-play"></i></button>
-    
-    <div class="progress-bar" id="progressBar">
-      <div></div>
+    <video id="videoPlayer" class="video-js vjs-default-skin" controls preload="auto">
+        <source id="videoSource" src="" type="">
+    </video>
+    <!-- Custom Controls -->
+    <div class="vjs-custom-controls">
+        <button id="playPauseBtn"><i class="fas fa-play"></i></button>
+        <div class="vjs-progress-holder" id="progressBar">
+            <div class="vjs-play-progress"></div>
+        </div>
+        <div class="vjs-volume-control">
+            <button id="muteBtn"><i class="fas fa-volume-up"></i></button>
+            <input type="range" id="volumeSlider" class="vjs-volume-slider" min="0" max="1" step="0.01" value="1">
+        </div>
+        <button id="fullscreenBtn" class="vjs-fullscreen-control"><i class="fas fa-expand"></i></button>
     </div>
-
-    <div class="volume-control">
-      <button id="muteBtn"><i class="fas fa-volume-up"></i></button>
-      <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1">
-    </div>
-
-    <button id="fullscreenBtn" class="fullscreen"><i class="fas fa-expand"></i></button>
-  </div>
 </div>
 
 <!-- Font Awesome for Icons -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-hls@latest/dist/videojs-contrib-hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-youtube@latest/dist/Youtube.min.js"></script>
 
-<!-- Video Player Script -->
 <script>
-  const video = document.getElementById('videoPlayer');
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  const muteBtn = document.getElementById('muteBtn');
-  const volumeSlider = document.getElementById('volumeSlider');
-  const progressBar = document.getElementById('progressBar');
-  const progressBarFill = progressBar.querySelector('div');
-  const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const player = videojs('videoPlayer', {
+        fluid: true,
+        responsive: true,
+        controls: true
+    });
 
-  // Play/Pause Toggle
-  playPauseBtn.addEventListener('click', () => {
-    if (video.paused) {
-      video.play();
-      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      video.pause();
-      playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const progressBar = document.getElementById('progressBar');
+    const progressBarFill = progressBar.querySelector('.vjs-play-progress');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // Play/Pause Toggle
+    playPauseBtn.addEventListener('click', () => {
+        if (player.paused()) {
+            player.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            player.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+    });
+
+    // Mute/Unmute Toggle
+    muteBtn.addEventListener('click', () => {
+        player.muted(!player.muted());
+        muteBtn.innerHTML = player.muted() ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+    });
+
+    // Volume Control
+    volumeSlider.addEventListener('input', (e) => {
+        player.volume(e.target.value);
+    });
+
+    // Progress Bar Update
+    player.on('timeupdate', () => {
+        const percent = (player.currentTime() / player.duration()) * 100;
+        progressBarFill.style.width = `${percent}%`;
+    });
+
+    // Seek Video by Clicking on Progress Bar
+    progressBar.addEventListener('click', (e) => {
+        const newTime = (e.offsetX / progressBar.offsetWidth) * player.duration();
+        player.currentTime(newTime);
+    });
+
+    // Fullscreen Toggle
+    fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            player.requestFullscreen();
+            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+        } else {
+            document.exitFullscreen();
+            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+        }
+    });
+
+    // Set initial source
+    function setVideoSource(src, type) {
+        player.src({ src: src, type: type });
+        player.play();
     }
-  });
 
-  // Mute/Unmute Toggle
-  muteBtn.addEventListener('click', () => {
-    video.muted = !video.muted;
-    muteBtn.innerHTML = video.muted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-  });
+    // Example for setting HLS (m3u8) stream
+    // setVideoSource('https://path/to/your/video.m3u8', 'application/x-mpegURL');
 
-  // Volume Control
-  volumeSlider.addEventListener('input', (e) => {
-    video.volume = e.target.value;
-  });
-
-  // Progress Bar Update
-  video.addEventListener('timeupdate', () => {
-    const percent = (video.currentTime / video.duration) * 100;
-    progressBarFill.style.width = `${percent}%`;
-  });
-
-  // Seek Video by Clicking on Progress Bar
-  progressBar.addEventListener('click', (e) => {
-    const newTime = (e.offsetX / progressBar.offsetWidth) * video.duration;
-    video.currentTime = newTime;
-  });
-
-  // Fullscreen Toggle
-  fullscreenBtn.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      video.requestFullscreen();
-      fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-    } else {
-      document.exitFullscreen();
-      fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-    }
-  });
+    // Example for setting YouTube video
+    // setVideoSource('https://www.youtube.com/watch?v=YOUR_VIDEO_ID', 'video/youtube');
 </script>
 
 </body>
