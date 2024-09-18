@@ -3,195 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Video Player - LAKSHYANISCHYA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet">
+    <title>Modern Video Player</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
+            background-color: #333;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
 
         .video-container {
             position: relative;
+            width: 80%;
             max-width: 800px;
-            width: 100%;
-            background-color: #000;
-            border-radius: 10px;
+            background: #000;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .video-js {
+        video {
             width: 100%;
-            height: 100%;
+            display: block;
         }
 
-        .vjs-custom-controls {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
+        .controls {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
         }
 
-        .vjs-custom-controls button {
-            background-color: transparent;
+        .control-btn {
+            background: #007bff;
             border: none;
             color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            padding: 10px;
-            font-size: 16px;
-            transition: 0.3s;
         }
 
-        .vjs-custom-controls button:hover {
-            color: #ffcc00;
+        .control-btn:hover {
+            background: #0056b3;
         }
 
-        .vjs-custom-controls button:focus {
-            outline: none;
-        }
-
-        .vjs-progress-holder {
-            position: relative;
-            width: 100%;
-            height: 5px;
-            background-color: #555;
+        .control-slider {
+            flex: 1;
             margin: 0 10px;
-            cursor: pointer;
         }
 
-        .vjs-progress-holder .vjs-play-progress {
-            height: 100%;
-            background-color: #ffcc00;
+        #progress {
+            margin: 0 10px;
         }
 
-        .vjs-volume-control {
-            display: flex;
-            align-items: center;
-        }
-
-        .vjs-volume-slider {
-            width: 100px;
-            margin-left: 10px;
-        }
-
-        .vjs-fullscreen-control {
-            font-size: 18px;
+        #volume {
+            width: 80px;
         }
     </style>
 </head>
 <body>
-
-<div class="video-container">
-    <video id="videoPlayer" class="video-js vjs-default-skin" controls preload="auto">
-        <source id="videoSource" src="" type="">
-    </video>
-    <!-- Custom Controls -->
-    <div class="vjs-custom-controls">
-        <button id="playPauseBtn"><i class="fas fa-play"></i></button>
-        <div class="vjs-progress-holder" id="progressBar">
-            <div class="vjs-play-progress"></div>
+    <div class="video-container">
+        <video id="video" src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
+        <div class="controls">
+            <button id="playPause" class="control-btn">Play</button>
+            <input id="progress" type="range" min="0" max="100" value="0" class="control-slider">
+            <button id="muteUnmute" class="control-btn">Mute</button>
+            <input id="volume" type="range" min="0" max="100" value="100" class="control-slider">
+            <button id="fullscreen" class="control-btn">Fullscreen</button>
         </div>
-        <div class="vjs-volume-control">
-            <button id="muteBtn"><i class="fas fa-volume-up"></i></button>
-            <input type="range" id="volumeSlider" class="vjs-volume-slider" min="0" max="1" step="0.01" value="1">
-        </div>
-        <button id="fullscreenBtn" class="vjs-fullscreen-control"><i class="fas fa-expand"></i></button>
     </div>
-</div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const playPauseBtn = document.getElementById('playPause');
+            const muteUnmuteBtn = document.getElementById('muteUnmute');
+            const progress = document.getElementById('progress');
+            const volumeControl = document.getElementById('volume');
+            const fullscreenBtn = document.getElementById('fullscreen');
 
-<!-- Font Awesome for Icons -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-<script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-hls@latest/dist/videojs-contrib-hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-youtube@latest/dist/Youtube.min.js"></script>
+            playPauseBtn.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                    playPauseBtn.textContent = 'Pause';
+                } else {
+                    video.pause();
+                    playPauseBtn.textContent = 'Play';
+                }
+            });
 
-<script>
-    const player = videojs('videoPlayer', {
-        fluid: true,
-        responsive: true,
-        controls: true
-    });
+            muteUnmuteBtn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                muteUnmuteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
+            });
 
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const muteBtn = document.getElementById('muteBtn');
-    const volumeSlider = document.getElementById('volumeSlider');
-    const progressBar = document.getElementById('progressBar');
-    const progressBarFill = progressBar.querySelector('.vjs-play-progress');
-    const fullscreenBtn = document.getElementById('fullscreenBtn');
+            volumeControl.addEventListener('input', (e) => {
+                video.volume = e.target.value / 100;
+            });
 
-    // Play/Pause Toggle
-    playPauseBtn.addEventListener('click', () => {
-        if (player.paused()) {
-            player.play();
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        } else {
-            player.pause();
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        }
-    });
+            video.addEventListener('timeupdate', () => {
+                const value = (video.currentTime / video.duration) * 100;
+                progress.value = value;
+            });
 
-    // Mute/Unmute Toggle
-    muteBtn.addEventListener('click', () => {
-        player.muted(!player.muted());
-        muteBtn.innerHTML = player.muted() ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-    });
+            progress.addEventListener('input', () => {
+                video.currentTime = (progress.value / 100) * video.duration;
+            });
 
-    // Volume Control
-    volumeSlider.addEventListener('input', (e) => {
-        player.volume(e.target.value);
-    });
-
-    // Progress Bar Update
-    player.on('timeupdate', () => {
-        const percent = (player.currentTime() / player.duration()) * 100;
-        progressBarFill.style.width = `${percent}%`;
-    });
-
-    // Seek Video by Clicking on Progress Bar
-    progressBar.addEventListener('click', (e) => {
-        const newTime = (e.offsetX / progressBar.offsetWidth) * player.duration();
-        player.currentTime(newTime);
-    });
-
-    // Fullscreen Toggle
-    fullscreenBtn.addEventListener('click', () => {
-        if (!document.fullscreenElement) {
-            player.requestFullscreen();
-            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-        } else {
-            document.exitFullscreen();
-            fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-        }
-    });
-
-    // Set initial source
-    function setVideoSource(src, type) {
-        player.src({ src: src, type: type });
-        player.play();
-    }
-
-    // Example for setting HLS (m3u8) stream
-    // setVideoSource('https://path/to/your/video.m3u8', 'application/x-mpegURL');
-
-    // Example for setting YouTube video
-    // setVideoSource('https://www.youtube.com/watch?v=YOUR_VIDEO_ID', 'video/youtube');
-</script>
-
+            fullscreenBtn.addEventListener('click', () => {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.mozRequestFullScreen) { // Firefox
+                    video.mozRequestFullScreen();
+                } else if (video.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) { // IE/Edge
+                    video.msRequestFullscreen();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
